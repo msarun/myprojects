@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
+
+    <aop:aspectj-autoproxy/>
+
+    <bean id="circle" class = "com.home.spring.aop.Circle">
+        <property name="name" value="circle"/>
+        <property name="radius" value='1'/>
+     <!--   <constructor-arg value="1"/>
+        <constructor-arg value="circle"/>-->
+    </bean>
+
+    <!--<bean id="SampleAspect" class="com.home.spring.aop.annotations.SampleAspect" />-->
+    <bean id="AspectDemo" class="com.home.spring.aop.annotations.AspectDemo" />
+    <bean id="XmlAspect" class="com.home.spring.aop.xmlbased.XmlAspect"/>
+
+    <aop:config>
+        <aop:aspect id="XmlAspectDemo" ref="XmlAspect">
+            <aop:pointcut id="allGetters" expression="execution(* com.home.spring.aop.Circle.get*())"/>
+            <aop:before pointcut-ref="allGetters" method="beforeUsingPointCut"/>
+            <aop:after pointcut="execution(* com.home.spring.aop.Circle.get*()))" method="afterUsingPointCut"/>
+            <aop:before pointcut="within(com.home.spring.aop.Circle)" method="beforeUsingPointCut" />
+            <aop:after-returning method="afterReturningDemo" pointcut="execution(com.home.spring.aop.Circle com.home.spring.aop.Circle.getInstance())" returning="circleObj"/>
+            <aop:after-throwing method="afterThrowingDemo" pointcut="execution(void com.home.spring.aop.Circle.throwEx())" throwing="ex" />
+        </aop:aspect>
+    </aop:config>
+</beans>
